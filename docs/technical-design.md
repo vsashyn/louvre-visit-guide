@@ -1,8 +1,8 @@
 # Louvre guide technical design
 
-How we build the app. Written 20 September 2026. This replaces the vanilla-JS plan, kept for reference in `docs/archive/vanilla-offline-plan.md`.
+How we build the app. Written 20 September 2026. This replaces an earlier vanilla-JS plan, which has since been deleted along with the rest of `docs/archive/`.
 
-The plan below is as approved and is not rewritten as work lands. Where the two differ, `docs/implementation-plan.md` is what was actually built and why. One change is worth knowing before you read: `docs/visit-route.md`, referenced throughout, has been replaced by `content/route.en.md` and `content/route.uk.md` and deleted, exactly as this document asks.
+The plan below is as approved and is not rewritten as work lands. Where the two differ, `docs/implementation-plan.md` is what was actually built and why. Two changes are worth knowing before you read. `docs/visit-route.md`, referenced throughout, has been replaced by `content/route.en.md` and `content/route.uk.md` and deleted, exactly as this document asks. The archived plans in `docs/archive/` and `uk/docs/archive/`, and the Ukrainian `README.md` and `CLAUDE.uk.md`, have also been deleted, so references to them below point at nothing.
 
 ## What changed
 
@@ -343,7 +343,7 @@ The index is grouped by room. No flat mode.
 
 `docs/visit-route.md` is deleted once `content/route.{lang}.md` replaces it.
 
-Technical documentation is English only. The Ukrainian translation of the old design has moved to `uk/docs/archive/vanilla-offline-plan.md` and is not retranslated. `uk/` keeps translations of content and of the reader-facing README, not of engineering docs.
+Technical documentation is English only. The Ukrainian translation of the old design is not retranslated and has since been deleted. `uk/` keeps translations of content, not of engineering docs.
 
 An image with an uncertain licence is dropped rather than shipped, enforced at build time by the table above.
 

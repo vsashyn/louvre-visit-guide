@@ -15,19 +15,18 @@ A mobile guide app for visiting the Louvre. A visitor picks an artwork and gets 
 - `assets/` holds the content, one Markdown file per item. 78 exist, covering all three wings: paintings, sculpture, objects and rooms. `assets/INDEX.md` is a generated table of all of them, grouped by wing and level.
 - `docs/technical-design.md` is the implementation plan. Read it before writing app code.
 - `content/` holds the prose that is not about a single work. `route.{lang}.md` is the curated full-day route, one file per language. Frontmatter carries the stop list, the body carries the prose around it. The pipeline emits `route.{lang}.json` and fails the build if a stop points at an id that has no item, or if the two languages describe different walks. `offline.{lang}.md` is the setup guide for getting the app onto a phone, emitted the same way.
-- `docs/archive/` holds superseded plans. Reference only, do not build from it.
 - `src/` is the app, `tools/` the build scripts, `public/` the generated JSON and WebP images. `dist/` is the deployable output.
 - `.claude/` holds Claude Code settings.
-- `uk/` holds the Ukrainian content. `uk/assets/` mirrors `assets/` file for file with the same ids, plus a translated `README.md` and `CLAUDE.uk.md`. Technical documentation is English only and is not translated; superseded translations sit in `uk/docs/archive/`. English stays the source of truth, and `uk/README.md` records the section-heading mapping the content pipeline needs.
+- `uk/assets/` holds the Ukrainian content and mirrors `assets/` file for file with the same ids. English stays the source of truth. Technical documentation is English only and is not translated. The section-heading mapping the pipeline needs is the per-language table in `tools/build-content.mjs`, which fails the build on a heading it does not know.
 - `Louvre-Guide-UK.pdf` is the whole Ukrainian guide as one printable document, generated from `uk/assets/` by `tools/build-pdf.py`. It is not tracked in git; regenerate it rather than looking for it in a fresh clone.
 
 ## Stack
 
-An offline-first web app on React, TanStack Router, Tailwind and shadcn/ui, built with Vite, hosted as a static site on Cloudflare and installed to the iPhone home screen where it runs standalone. No web fonts and no third-party requests at runtime. shadcn copies component source into the repo, so it costs bundle bytes and nothing else. An earlier native iOS plan and an earlier vanilla-JS plan were both dropped; see `docs/archive/`.
+An offline-first web app on React, TanStack Router, Tailwind and shadcn/ui, built with Vite, hosted as a static site on Cloudflare and installed to the iPhone home screen where it runs standalone. No web fonts and no third-party requests at runtime. shadcn copies component source into the repo, so it costs bundle bytes and nothing else. An earlier native iOS plan and an earlier vanilla-JS plan were both dropped before any code was written.
 
 Four kinds of page. An index at the root with search over all items, one page per item per language, a route guide page, and a setup page at `/{lang}/offline` that explains how to install the app and download the pictures. Language is a path segment, so `/en/item/mona-lisa` and `/uk/item/mona-lisa` are the same work in two languages and the switch is one link.
 
-`assets/`, `uk/assets/` and `content/route.{lang}.md` are the source of truth. `tools/build-content.mjs` turns them into `content.{lang}.json`, `route.{lang}.json` and WebP images. The app never parses Markdown at runtime. Images download into `~/.cache/louvre-guide/`, so a rebuild converts from disk and touches the network only for something it has never seen.
+`assets/`, `uk/assets/` and `content/` are the source of truth. `tools/build-content.mjs` turns them into `content.{lang}.json`, `route.{lang}.json` and WebP images. The app never parses Markdown at runtime. Images download into `~/.cache/louvre-guide/`, so a rebuild converts from disk and touches the network only for something it has never seen.
 
 Offline is the hard requirement, not a feature. A hand-written service worker serves everything cache-first with no network fallback, and answers SPA navigations from the cached shell. The shell and the JSON precache at install; images download through an explicit in-app button into a separate cache, because precaching 16 MB in an install event is how that step fails. `docs/technical-design.md` has the reasoning and the rest of the tactics, and `docs/implementation-plan.md` tracks what is built and what each decision cost.
 
