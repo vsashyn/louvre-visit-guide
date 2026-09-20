@@ -1,8 +1,10 @@
 import type { Block } from '@/lib/content'
 
 /** Paragraphs, bullet lists and subheadings, the only three block types the
- *  pipeline emits. Shared by the item pages and the route guide. */
-export function Blocks({ blocks, lead }: { blocks: Block[]; lead?: boolean }) {
+ *  pipeline emits. Shared by the item pages, the route guide and the setup
+ *  page. Every block renders at the same size: `In one line` used to be set
+ *  larger and it made the top of an item page read as two different documents. */
+export function Blocks({ blocks }: { blocks: Block[] }) {
   return (
     <>
       {blocks.map((block, i) => {
@@ -25,7 +27,7 @@ export function Blocks({ blocks, lead }: { blocks: Block[]; lead?: boolean }) {
           )
         }
         return (
-          <p key={i} className={`mt-3 leading-relaxed first:mt-0 ${lead ? 'text-lg' : ''}`}>
+          <p key={i} className="mt-3 leading-relaxed first:mt-0">
             {block.text}
           </p>
         )

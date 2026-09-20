@@ -6,6 +6,7 @@ import { isLang, type Lang } from '@/lib/lang'
 import { t, type Strings } from '@/lib/ui'
 import { Badge } from '@/components/ui/badge'
 import { HeroImage } from '@/components/HeroImage'
+import { BackLink } from '@/components/BackLink'
 import { Blocks } from '@/components/Blocks'
 
 export const Route = createFileRoute('/$lang/item/$id')({
@@ -66,7 +67,7 @@ function SectionView({ section }: { section: Section }) {
         <Blocks blocks={blocks} />
       </div>
     )
-  else body = <Blocks blocks={blocks} lead={kind === 'inOneLine'} />
+  else body = <Blocks blocks={blocks} />
 
   return (
     <section className="mt-8">
@@ -161,6 +162,7 @@ function ItemPage() {
 
   return (
     <article className="pb-4">
+      <BackLink lang={lang} />
       {item.image && <HeroImage image={item.image} alt={item.title} lang={lang} />}
       <header>
         <h1 className="text-2xl font-semibold leading-tight">{item.title}</h1>

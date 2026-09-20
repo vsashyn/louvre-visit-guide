@@ -43,6 +43,8 @@ export const UI = {
     minutesShort: (n: number) => `${n} min`,
     themeToDark: 'Switch to the dark theme',
     themeToLight: 'Switch to the light theme',
+    back: 'Back',
+    offlineLink: 'Using this offline',
   },
   uk: {
     searchPlaceholder: 'Пошук за назвою або автором',
@@ -90,6 +92,8 @@ export const UI = {
     minutesShort: (n: number) => `${n} хв`,
     themeToDark: 'Перемкнути на темну тему',
     themeToLight: 'Перемкнути на світлу тему',
+    back: 'Назад',
+    offlineLink: 'Як користуватися офлайн',
   },
 } satisfies Record<Lang, unknown>
 

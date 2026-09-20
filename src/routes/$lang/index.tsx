@@ -6,6 +6,7 @@ import { search } from '@/lib/search'
 import { t } from '@/lib/ui'
 import { ItemRow } from '@/components/ItemRow'
 import { ImageCacheCard } from '@/components/ImageCacheCard'
+import { Link } from '@tanstack/react-router'
 import { Input } from '@/components/ui/input'
 
 type IndexSearch = { q?: string }
@@ -104,6 +105,14 @@ function IndexPage() {
           </section>
         ))
       )}
+
+      <Link
+        to="/$lang/offline"
+        params={{ lang }}
+        className="mt-6 flex min-h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground active:bg-muted hover:bg-muted/50"
+      >
+        {s.offlineLink}
+      </Link>
     </div>
   )
 }

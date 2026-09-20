@@ -46,9 +46,9 @@ Prove routing and the SPA fallback before writing a single feature. A deep link 
       `wrangler.jsonc` with static assets and `not_found_handling: "single-page-application"`. Cache headers per the design doc.
       Check: config validates with `wrangler deploy --dry-run`.
 
-- [~] **1.9 Deploy and verify the deep link**
+- [x] **1.9 Deploy and verify the deep link**
       Check: hard refresh on the deployed `/en/item/mona-lisa` returns the app, not a 404. This is the gate for Phase 1.
-      Verified locally under `wrangler dev`, which runs the same workerd runtime and asset router: `/`, `/en/`, `/uk/`, `/en/item/mona-lisa`, `/uk/item/the-lacemaker`, `/en/visit` and `/fr/` all return 200 with the app shell. The live deploy still needs a Cloudflare account.
+      Live at `https://louvre-guide.sashyn-v.workers.dev`. Every URL returns 200 with the app shell, including `/fr/`, and a cold load of `/en/item/mona-lisa` renders the item with its picture. Cache headers are as designed: `no-cache` on the shell, the worker and the JSON, a year and `immutable` on the hashed assets.
 
 ## Phase 2, content pipeline
 
@@ -219,7 +219,7 @@ Unblocked. Decision of 20 September 2026: keep all 78 images and render the cred
 
 - [x] **8.2 Type scale and one-handed layout**
       Generous type, large tap targets, thumb-reachable controls.
-      A 17px root, so one number moves the whole rem-based scale. Every control on all three page kinds measures at least 44px, checked in the browser rather than by eye, and nothing overflows at 390px.
+      Every control on every page kind measures at least 44px, checked in the browser rather than by eye, and nothing overflows at 390px. The type scale went to a 17px root and came back to 16 after looking at it on a phone-width screen; see the note below.
 
 - [x] **8.3 Manifest, icons, safe-area insets**
       `display: standalone`, `viewport-fit=cover`, `env(safe-area-inset-*)` padding.
@@ -234,10 +234,21 @@ Unblocked. Decision of 20 September 2026: keep all 78 images and render the cred
 
 ## Deploy
 
-- [ ] **Publish to Cloudflare**
-      `wrangler deploy` against an account that does not exist yet. Blocks 1.9 as well.
+- [x] **Publish to Cloudflare**
+      `wrangler deploy`, 109 files, 17 MB. Live at `https://louvre-guide.sashyn-v.workers.dev`.
+      Checked in a browser against the live origin: the deep link survives a cold load, the worker installs and precaches 26 files including both route JSONs, the Ukrainian route page renders, and a deep link still loads with the network cut.
 
 ---
+
+## Added after the plan
+
+Asked for once the app was live and in use.
+
+- [x] **A setup page at `/{lang}/offline`**
+      Four sections, the first three numbered as steps, from `content/offline.{lang}.md` through the same pipeline and the same heading table discipline as everything else a visitor reads. The live state of the picture cache sits at the top, so the page you read to set this up is also the page you do it on. Reached from a link under the index list.
+
+- [x] **A back control on the item page**
+      History back when there is history, which keeps the search query you arrived with, and a plain link to the index when there is not, which is the case for a deep link opened from a message or the home screen.
 
 ## Running notes
 
@@ -322,3 +333,9 @@ Kept as work proceeds. Surprises, decisions taken mid-flight, anything that cont
 **The zoom viewer keeps its own colours on purpose.** It is black in both themes, because a picture is judged against black and its chrome is white on black either way. It was excluded from the token rewrite by hand.
 
 **Header controls were all too small and nobody would have noticed by looking.** The home link measured 21px, the language switch 27px and the download button 30px, against a 44px floor. Measuring every interactive element in the page, rather than spot-checking the ones that look small, is what found them.
+
+**The hostname is now fixed.** `louvre-guide.sashyn-v.workers.dev` is where the app lives, and the design doc is right that it cannot move casually. Browser storage is scoped to the origin, so a later move to a custom domain does not migrate the 13.6 MB of pictures a visitor has downloaded, it orphans them and asks for the download again on the new origin. Decide on a custom domain before anyone installs this to a home screen, or accept that the first install is on workers.dev forever.
+
+**The 17px root came back to 16.** The reasoning for 17 still holds in the abstract, but on a 390px screen it read as slightly oversized rather than generous, and `In one line` set one step larger on top of that made the head of an item page look like two documents stitched together. Reading text is now 16px everywhere, the lead treatment is gone, and the rest of the scale hangs off that. Tap targets were re-measured after the change, because `min-h-11` is 44px at a 16px root with nothing to spare.
+
+**The setup guide is content, not chrome.** It could have gone into `src/lib/ui.ts` as a dozen strings. It is several hundred words of prose in two languages, which is exactly what the content pipeline is for, so it lives in `content/offline.{lang}.md` with a heading table, an enforced section order and automatic precaching. `ui.ts` stays what it says it is.

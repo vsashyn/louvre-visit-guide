@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import type { Item } from '@/lib/content'
 import type { Lang } from '@/lib/lang'
 import { missingTitles, totalMegabytes, useImageCache } from '@/lib/images'
@@ -12,17 +13,35 @@ import { Button } from '@/components/ui/button'
  * that names the works, because finding out in front of the Victory of
  * Samothrace is too late to do anything about it.
  */
-export function ImageCacheCard({ items, lang }: { items: Item[]; lang: Lang }) {
+export function ImageCacheCard({
+  items,
+  lang,
+  showComplete = false,
+}: {
+  items: Item[]
+  lang: Lang
+  /** The index hides a finished download; the setup page confirms it. */
+  showComplete?: boolean
+}) {
   const { state, download } = useImageCache(items)
   const online = useOnline()
   const s = t(lang)
 
-  if (state.kind === 'unavailable' || state.kind === 'checking') return null
-  if (state.kind === 'complete') return null
-
   const frame = (children: React.ReactNode) => (
     <section className="mb-4 rounded-lg border border-border px-4 py-3">{children}</section>
   )
+
+  if (state.kind === 'unavailable' || state.kind === 'checking') return null
+  if (state.kind === 'complete') {
+    return showComplete
+      ? frame(
+          <p className="flex items-center gap-2 text-sm">
+            <Check className="size-4 shrink-0" />
+            {s.picturesDone}
+          </p>,
+        )
+      : null
+  }
 
   if (state.kind === 'working') {
     const pct = state.total ? Math.round((state.done / state.total) * 100) : 0

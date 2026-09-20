@@ -77,6 +77,25 @@ const ROUTE_HEADING_KIND = {
 
 const ROUTE_ORDER = ['entrance', 'shape', 'ahead', 'tired', 'practical', 'sources']
 
+/** The offline setup guide. Same rule again: map by text, fail on anything
+ *  that is not in the table. */
+const OFFLINE_HEADING_KIND = {
+  en: {
+    'Put it on your home screen': 'install',
+    'Download the pictures': 'pictures',
+    'Check it before you go': 'check',
+    'Inside the museum': 'inside',
+  },
+  uk: {
+    'Додайте на головний екран': 'install',
+    'Завантажте зображення': 'pictures',
+    'Перевірте перед виходом': 'check',
+    'У музеї': 'inside',
+  },
+}
+
+const OFFLINE_ORDER = ['install', 'pictures', 'check', 'inside']
+
 /** Present on every item in both languages. Everything else may be null.
  *  `room` is not here on purpose: the Pyramid sits in the Cour Napoléon and
  *  has no room number. */
@@ -517,6 +536,32 @@ function readRoute(lang, ids) {
   }
 }
 
+function readOffline(lang) {
+  const file = `content/offline.${lang}.md`
+  let raw
+  try {
+    raw = readFileSync(join(ROOT, 'content', `offline.${lang}.md`), 'utf8')
+  } catch {
+    fail(file, 'missing file', 'the offline guide page has nothing to render without it')
+    return null
+  }
+  const [fm, body] = parseRouteFrontmatter(raw, file)
+  if (!fm) return null
+  for (const key of ['title', 'lead']) {
+    if (!fm[key]) fail(file, 'missing field', key)
+  }
+
+  const { sections } = parseBody(body, OFFLINE_HEADING_KIND[lang], file)
+  const order = sections.map((s) => s.kind)
+  if (order.join(',') !== OFFLINE_ORDER.join(',')) {
+    fail(file, 'section order', `expected ${OFFLINE_ORDER.join(', ')}, got ${order.join(', ')}`)
+  }
+  return { lang, title: fm.title, lead: fm.lead, sections }
+}
+
+const offline = {}
+for (const lang of Object.keys(SOURCES)) offline[lang] = readOffline(lang)
+
 const routes = {}
 for (const lang of Object.keys(SOURCES)) routes[lang] = readRoute(lang, enIds)
 
@@ -542,6 +587,13 @@ if (problems.length) {
   for (const p of problems) console.error(`  ${p}`)
   console.error('')
   process.exit(1)
+}
+
+for (const [lang, guide] of Object.entries(offline)) {
+  if (!guide) continue
+  const json = JSON.stringify(guide)
+  writeFileSync(join(OUT, `offline.${lang}.json`), json)
+  console.log(`  offline.${lang}.json  ${guide.sections.length} sections  ${(Buffer.byteLength(json) / 1024).toFixed(0)} KB`)
 }
 
 for (const [lang, route] of Object.entries(routes)) {

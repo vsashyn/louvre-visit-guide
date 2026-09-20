@@ -24,12 +24,11 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* A 17px root rather than 16. Generous type is a requirement here, not a
-     preference: this is read standing up, in low light, at arm's length, by
-     someone who has been on their feet for hours. Everything in the app is
-     sized in rem, so this one number moves the whole scale, tap targets
-     included. */
-  font-size: 106.25%;
+  /* 16px root. A 17px root was tried for legibility at arm's length and read
+     as slightly oversized on a phone; the reading text is 16px and the rest of
+     the scale hangs off it. Everything is sized in rem, so this one number
+     moves all of it, tap targets included. */
+  font-size: 100%;
 }
 
 body {

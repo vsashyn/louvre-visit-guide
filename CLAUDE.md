@@ -14,7 +14,7 @@ A mobile guide app for visiting the Louvre. A visitor picks an artwork and gets 
 
 - `assets/` holds the content, one Markdown file per item. 78 exist, covering all three wings: paintings, sculpture, objects and rooms. `assets/INDEX.md` is a generated table of all of them, grouped by wing and level.
 - `docs/technical-design.md` is the implementation plan. Read it before writing app code.
-- `content/route.{lang}.md` is the curated full-day route, one file per language. Frontmatter carries the stop list, the body carries the prose around it. The pipeline emits `route.{lang}.json` and fails the build if a stop points at an id that has no item, or if the two languages describe different walks.
+- `content/` holds the prose that is not about a single work. `route.{lang}.md` is the curated full-day route, one file per language. Frontmatter carries the stop list, the body carries the prose around it. The pipeline emits `route.{lang}.json` and fails the build if a stop points at an id that has no item, or if the two languages describe different walks. `offline.{lang}.md` is the setup guide for getting the app onto a phone, emitted the same way.
 - `docs/archive/` holds superseded plans. Reference only, do not build from it.
 - `src/` is the app, `tools/` the build scripts, `public/` the generated JSON and WebP images. `dist/` is the deployable output.
 - `.claude/` holds Claude Code settings.
@@ -25,7 +25,7 @@ A mobile guide app for visiting the Louvre. A visitor picks an artwork and gets 
 
 An offline-first web app on React, TanStack Router, Tailwind and shadcn/ui, built with Vite, hosted as a static site on Cloudflare and installed to the iPhone home screen where it runs standalone. No web fonts and no third-party requests at runtime. shadcn copies component source into the repo, so it costs bundle bytes and nothing else. An earlier native iOS plan and an earlier vanilla-JS plan were both dropped; see `docs/archive/`.
 
-Three kinds of page. An index at the root with search over all items, one page per item per language, and a route guide page. Language is a path segment, so `/en/item/mona-lisa` and `/uk/item/mona-lisa` are the same work in two languages and the switch is one link.
+Four kinds of page. An index at the root with search over all items, one page per item per language, a route guide page, and a setup page at `/{lang}/offline` that explains how to install the app and download the pictures. Language is a path segment, so `/en/item/mona-lisa` and `/uk/item/mona-lisa` are the same work in two languages and the switch is one link.
 
 `assets/`, `uk/assets/` and `content/route.{lang}.md` are the source of truth. `tools/build-content.mjs` turns them into `content.{lang}.json`, `route.{lang}.json` and WebP images. The app never parses Markdown at runtime. Images download into `~/.cache/louvre-guide/`, so a rebuild converts from disk and touches the network only for something it has never seen.
 
