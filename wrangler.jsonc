@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "louvre-guide",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    // Deep links like /en/item/mona-lisa are client routes with no file behind
+    // them. Without this, a hard refresh on one returns 404 before the service
+    // worker exists to catch it.
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

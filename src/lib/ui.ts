@@ -1,0 +1,97 @@
+import type { Lang } from './lang'
+
+/** UI chrome only. Everything a visitor reads about an artwork comes from the
+ *  content files, never from here. */
+export const UI = {
+  en: {
+    searchPlaceholder: 'Search by name or artist',
+    noResults: 'Nothing matches that.',
+    noResultsHint: 'Try part of a title, or an artist.',
+    clear: 'Clear',
+    results: (n: number) => `${n} ${n === 1 ? 'work' : 'works'}`,
+    level: 'Level',
+    room: 'Room',
+    busy: { high: 'Busy', extreme: 'Very busy' },
+    routeTitle: 'Route',
+    home: 'Louvre',
+    details: 'Details',
+    medium: 'Medium',
+    dimensions: 'Dimensions',
+    inventory: 'Inventory',
+    image: 'Image',
+    imageSource: 'Source',
+    previous: 'Previous',
+    next: 'Next',
+    itemNotFound: 'That work is not in the guide.',
+    backToList: 'Back to the list',
+    updateReady: 'A newer version is ready.',
+    updateAction: 'Update',
+    zoomOpen: 'Open the picture full screen',
+    zoomClose: 'Close',
+    zoomHint: 'Pinch to zoom, double tap to fit',
+    noPicture: 'Picture not downloaded.',
+    picturesTitle: 'Pictures',
+    picturesSize: (mb: number, n: number) => `${n} works, about ${mb} MB`,
+    picturesDownload: 'Download',
+    picturesRetry: 'Try again',
+    picturesWorking: (done: number, total: number) => `${done} of ${total}`,
+    picturesDone: 'All pictures are on this phone.',
+    picturesMissingOnline: (n: number) => `${n} pictures are missing.`,
+    picturesMissingOffline: (n: number) =>
+      `${n} pictures were never downloaded and you are offline. Those works show text only.`,
+    picturesMore: (n: number) => `and ${n} more`,
+    minutesShort: (n: number) => `${n} min`,
+    themeToDark: 'Switch to the dark theme',
+    themeToLight: 'Switch to the light theme',
+  },
+  uk: {
+    searchPlaceholder: 'Пошук за назвою або автором',
+    noResults: 'Нічого не знайдено.',
+    noResultsHint: 'Спробуйте частину назви або автора.',
+    clear: 'Очистити',
+    results: (n: number) => {
+      const t = n % 10
+      const h = n % 100
+      if (t === 1 && h !== 11) return `${n} твір`
+      if (t >= 2 && t <= 4 && (h < 12 || h > 14)) return `${n} твори`
+      return `${n} творів`
+    },
+    level: 'Рівень',
+    room: 'Зала',
+    busy: { high: 'Людно', extreme: 'Дуже людно' },
+    routeTitle: 'Маршрут',
+    home: 'Лувр',
+    details: 'Довідка',
+    medium: 'Матеріал',
+    dimensions: 'Розміри',
+    inventory: 'Інвентарний номер',
+    image: 'Зображення',
+    imageSource: 'Джерело',
+    previous: 'Попередній',
+    next: 'Наступний',
+    itemNotFound: 'Цього твору немає в путівнику.',
+    backToList: 'До списку',
+    updateReady: 'Готова новіша версія.',
+    updateAction: 'Оновити',
+    zoomOpen: 'Відкрити зображення на весь екран',
+    zoomClose: 'Закрити',
+    zoomHint: 'Зведіть пальці, щоб збільшити, подвійний дотик повертає масштаб',
+    noPicture: 'Зображення не завантажено.',
+    picturesTitle: 'Зображення',
+    picturesSize: (mb: number, n: number) => `${n} творів, близько ${mb} МБ`,
+    picturesDownload: 'Завантажити',
+    picturesRetry: 'Спробувати ще раз',
+    picturesWorking: (done: number, total: number) => `${done} з ${total}`,
+    picturesDone: 'Усі зображення на цьому телефоні.',
+    picturesMissingOnline: (n: number) => `Бракує ${n} зображень.`,
+    picturesMissingOffline: (n: number) =>
+      `${n} зображень не завантажено, а ви офлайн. Ці твори будуть лише з текстом.`,
+    picturesMore: (n: number) => `та ще ${n}`,
+    minutesShort: (n: number) => `${n} хв`,
+    themeToDark: 'Перемкнути на темну тему',
+    themeToLight: 'Перемкнути на світлу тему',
+  },
+} satisfies Record<Lang, unknown>
+
+export type Strings = (typeof UI)['en']
+export const t = (lang: Lang): Strings => UI[lang] as Strings

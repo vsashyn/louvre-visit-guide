@@ -1,0 +1,18 @@
+# Content-hashed filenames never change contents, so cache them forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The shell and the worker must never be served stale. A stale cached service
+# worker is the one reliable way to get permanently stuck on an old build.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+
+# Content is regenerated per build and precached by the worker, not by the CDN.
+/content.*.json
+  Cache-Control: no-cache
+/route.*.json
+  Cache-Control: no-cache

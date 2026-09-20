@@ -1,0 +1,15 @@
+.pdfcache/
+node_modules/
+dist/
+.wrangler/
+src/routeTree.gen.ts
+
+# Generated from assets/ and uk/assets/ by tools/build-content.mjs
+public/content.*.json
+public/route.*.json
+public/images/
+public/icons/
+.DS_Store
+
+# 17 MB, generated from uk/assets/ by tools/build-pdf.py
+Louvre-Guide-UK.pdf
