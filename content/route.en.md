@@ -179,16 +179,6 @@ Drop in this order. Everything above the cut stays worth doing.
 - Richelieu 0, down to Hammurabi and the Lamassu
 - Richelieu 2, down to the two Vermeers
 
-## Practical
-
-Lunch at 15:45 is late, but it sits where the route crosses the Hall Napoléon. If that is too long a stretch, there is a café on Denon level 1 around 13:00.
-
-Meeting point if you separate: the Winged Victory landing. Visible from several directions and impossible to describe wrong.
-
-Bags up to 55 by 35 by 20 cm come into the galleries with you. Anything larger is refused at the door. Free lockers in the Hall Napoléon, same-day collection. Selfie sticks, tripods and flash are banned, and no eating in the exhibition rooms.
-
-Eight hours on museum floors is a lot. The Richelieu block is where it will hit, which is why the drop list concentrates there.
-
 ## Sources
 
 - Louvre hours and admission, louvre.fr/en/visit/hours-admission
